@@ -24,23 +24,31 @@ Test the C Program for the desired output.
 # PROGRAM:
 
 ## C Program to create new process using Linux API system calls fork() and getpid() , getppid() and to print process ID and parent Process ID using Linux API system calls
+```
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/wait.h>
 
+int main()
+{
+    int pid = fork();
 
+    if (pid == 0)
+        printf("Child process: %d\n", getpid());
+    else
+    {
+        printf("Parent process: %d\n", getpid());
+        wait(NULL);
+    }
 
-
-
-
-
-
-
-
-
+    return 0;
+}
+```
 
 
 ##OUTPUT
 
-
-
+<img width="917" height="647" alt="image" src="https://github.com/user-attachments/assets/f1ff2136-f0a5-48fc-a364-9617ef0bea79" />
 
 
 
@@ -48,6 +56,62 @@ Test the C Program for the desired output.
 
 ## C Program to execute Linux system commands using Linux API system calls exec() , exit() , wait() family
 
+```
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+
+int main()
+{
+    int status;
+
+    printf("Running ps with execl\n");
+
+    if (fork() == 0)
+    {
+        execl("/bin/ps", "ps", "-f", NULL);
+        perror("execl failed");
+        exit(1);
+    }
+
+    wait(&status);
+
+    if (WIFEXITED(status))
+    {
+        printf("Child exited with status: %d\n", WEXITSTATUS(status));
+    }
+    else
+    {
+        printf("Child did not exit successfully\n");
+    }
+
+    printf("Running ps with execlp (without full path)\n");
+
+    if (fork() == 0)
+    {
+        execlp("ps", "ps", "-f", NULL);
+        perror("execlp failed");
+        exit(1);
+    }
+
+    wait(&status);
+
+    if (WIFEXITED(status))
+    {
+        printf("Child exited for execlp with status: %d\n", WEXITSTATUS(status));
+    }
+    else
+    {
+        printf("Child did not exit successfully\n");
+    }
+
+    printf("Done.\n");
+
+    return 0;
+}
 
 
 
@@ -63,8 +127,7 @@ Test the C Program for the desired output.
 
 
 
-
-
+```
 
 
 
@@ -77,15 +140,10 @@ Test the C Program for the desired output.
 
 
 
+<img width="888" height="694" alt="image" src="https://github.com/user-attachments/assets/147068a6-e56d-4460-9c56-a0bcc19213c4" />
 
 
-
-
-
-
-
-
-
+<img width="610" height="669" alt="image" src="https://github.com/user-attachments/assets/48315957-0e4f-4db0-877c-6aaf5849b828" />
 
 
 
